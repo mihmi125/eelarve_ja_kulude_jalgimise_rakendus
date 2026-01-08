@@ -1,1 +1,1 @@
-# eelarve_ja_kulude_j-lgimise_rakendus
+# eelarve_ja_kulude_jälgimise_rakendus
