@@ -22,9 +22,8 @@ def calculate(income_val, expenses_val):
     if isinstance(my_income, float) and isinstance(my_expenses, float):
         amount = my_income - my_expenses
         return round(amount, 2)
-    
-    # Optional: Return the warnings if calculation fails
-    return my_income if isinstance(my_income, str) else my_expenses
+    else:
+        return "Invalid"
 
 def calculate_total_recursive(entries):
     """
