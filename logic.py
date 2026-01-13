@@ -1,27 +1,63 @@
-
 def income(number):
+    """Attempts to convert a given input into a float for income processing."""
     try:
         return float(number)
     except ValueError:
-        print(f"Warning: your entered income is not a valid income.")
-        return None
+        return "Warning: The entered income is not valid."
 
 
 def expenses(number):
+    """Attempts to convert a given input into a float for expense processing."""
     try:
         return float(number)
     except ValueError:
-        print(f"Warning: your entered expenses is not a valid expense.")
-        return None
+        return "Warning: The entered expenses value is not valid."
 
-def calculate(incomeval, expensesval):
-    my_income = income(incomeval)
-    my_expenses = expenses(expensesval)
+def calculate(income_val, expenses_val):
+    """Calculates the net balance (income - expenses) rounded to two decimals."""
+    my_income = income(income_val)
+    my_expenses = expenses(expenses_val)
 
-    if my_income is not None and my_expenses is not None:
-        Amount = my_income - my_expenses
-        print(round(Amount, 2))
-    else:
-        None
+    # Check if both are floats (not warning strings) before calculating
+    if isinstance(my_income, float) and isinstance(my_expenses, float):
+        amount = my_income - my_expenses
+        return round(amount, 2)
+    
+    # Optional: Return the warnings if calculation fails
+    return my_income if isinstance(my_income, str) else my_expenses
+
+def calculate_total_recursive(entries):
+    """
+    Calculates the total net balance from a list of dictionaries using recursion.
+    Treats 'expense' types as negative values.
+    """
+    # Base Case: If the list is empty, return 0
+    if not entries:
+        return 0
+    
+    # Process the first item in the current list
+    current = entries[0]
+    val = float(current["Amount"])
+    
+    # If the entry is an expense, subtract it from the total
+    if current["Type"].lower() == "expense":
+        val = -val
         
-mas = calculate(1o, 5)
+    # Recursive Step: Add the current value to the result of the rest of the list
+    return val + calculate_total_recursive(entries[1:])
+
+def get_category_summary(entries):
+    """
+    Groups the total spent/earned by their respective categories.
+    Returns a dictionary where keys are categories and values are totals.
+    """
+    # Create a set of all unique category names found in the entries
+    unique_categories = {row["Category"] for row in entries}
+    
+    summary = {}
+    for cat in unique_categories:
+        # Sum all amounts that belong to the current category
+        cat_total = sum(float(item["Amount"]) for item in entries if item["Category"] == cat)
+        summary[cat] = round(cat_total, 2)
+        
+    return summary
