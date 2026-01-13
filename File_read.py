@@ -1,78 +1,78 @@
-"""File saving module."""
+import os
+import csv
 from datetime import datetime
 
-def convert_info_to_dict(label, amount, category, description, type):
+def convert_info_to_dict(label, amount, category, description, entry_type):
     """Converts the input information to a dictionary."""
-    data = {
-        "Label": label,
-        "Amount": amount,
+    return {
+        "Label": str(label),
+        "Amount": float(amount),
         "Category": category,
         "Description": description,
-        "Type": type
+        "Type": entry_type
     }
-    return data
 
-def save_to_CSV(amount, category, description, type, filename="data.csv"):
-    """Saves the data to a CSV file."""
-
-    last_entry = load_from_CSV(filename)
-    counter = int(last_entry.get("Label", 0)) + 1
-
-    data = convert_info_to_dict(counter, amount, category, description, type)
-
-    with open(filename, "a", encoding="utf-8") as file:
-        for key, value in data.items():
-            file.write(f"{key}; {value}\n")
+def load_from_csv(filename="data.csv"):
+    """Loads all entries from a CSV file as a list of dicts."""
+    entries = []
+    if not os.path.exists(filename):
+        return entries
     
-    print(f"Saved data with Label: {counter}")
-
-def load_from_CSV(filename="data.csv"):
-    """Loads the data from a CSV file."""
-    data = {}
     try:
-        with open(filename, "r", encoding="utf-8") as file:
-            for line in file:
-                if "; " in line:
-                    key, value = line.strip().split("; ", 1)
-                    if key == "Amount":
-                        value = float(value)
-                    data[key] = value
-    except FileNotFoundError:
-        pass 
-    return data
+        with open(filename, "r", encoding="utf-8", newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                # Ensure Amount is treated as a float
+                row["Amount"] = float(row["Amount"])
+                entries.append(row)
+    except Exception as e:
+        print(f"Error loading data: {e}")
+    
+    return entries
+def save_to_csv(amount, category, description, entry_type, filename="data.csv"):
+    """Saves the data to a CSV file with an auto-incrementing Label."""
+    entries = load_from_csv(filename)
+    # Calculate next Label ID
+    if not entries:
+        counter = 1
+    else:
+        # Get the label of the last entry and add 1
+        counter = int(entries[-1].get("Label", 0)) + 1
+
+    data = convert_info_to_dict(counter, amount, category, description, entry_type)
+    header = ["Label", "Amount", "Category", "Description", "Type"]
+    
+    file_exists = os.path.exists(filename) and os.path.getsize(filename) > 0
+
+    with open(filename, "a", newline='', encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=header)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(data)
+    print(f"Saved entry with Label {counter}")
 
 def delete_data(target_label, filename="data.csv"):
     """Deletes a specific data dict based on its Label."""
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            lines = file.readlines()
-    except FileNotFoundError:
-        print("File not found.")
+    entries = load_from_csv(filename)
+    
+    initial_count = len(entries)
+    # Filter out the row with the target label
+    new_rows = [row for row in entries if str(row.get("Label")) != str(target_label)]
+    
+    if len(new_rows) == initial_count:
+        print(f"Label {target_label} not found.")
         return
 
-    with open(filename, "w", encoding="utf-8") as file:
-        skip = False
-        deleted = False
-        
-        for line in lines:
-            if line.startswith("Label;"):
-                parts = line.strip().split("; ")
-                if len(parts) > 1 and str(parts[1]) == str(target_label):
-                    skip = True
-                    deleted = True
-                else:
-                    skip = False
-            
-            if not skip:
-                file.write(line)
+    header = ["Label", "Amount", "Category", "Description", "Type"]
+    with open(filename, "w", encoding="utf-8", newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=header)
+        writer.writeheader()
+        writer.writerows(new_rows)
+    
+    print(f"Successfully deleted Label {target_label}")
 
-    if deleted:
-        print(f"Successfully deleted Label {target_label}")
-    else:
-        print(f"Label {target_label} not found")
-
-def save_summary_report(data, filename="summary_report.txt"):
-    """Saves a summary report to a text file."""
+def append_summary_report(data, filename="summary_report.txt"):
+    """Appends a summary report to a text file."""
     with open(filename, "a", encoding="utf-8") as file:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"Summary report ({timestamp})\n")
@@ -82,9 +82,3 @@ def save_summary_report(data, filename="summary_report.txt"):
         file.write(f"Description: {data.get('Description', '')}\n")
         file.write(f"Type: {data.get('Type', '')}\n")
         file.write("=================\n")
-
-
-# --- Testing area ---
-save_to_CSV(100, "Food", "Dinner", "Expense")
-save_to_CSV(200, "Tech", "Mouse", "Expense")
-delete_data(4)
