@@ -44,19 +44,3 @@ def calculate_total_recursive(entries):
         
     # Recursive Step: Add the current value to the result of the rest of the list
     return val + calculate_total_recursive(entries[1:])
-
-def get_category_summary(entries):
-    """
-    Groups the total spent/earned by their respective categories.
-    Returns a dictionary where keys are categories and values are totals.
-    """
-    # Create a set of all unique category names found in the entries
-    unique_categories = {row["Category"] for row in entries}
-    
-    summary = {}
-    for cat in unique_categories:
-        # Sum all amounts that belong to the current category
-        cat_total = sum(float(item["Amount"]) for item in entries if item["Category"] == cat)
-        summary[cat] = round(cat_total, 2)
-        
-    return summary
