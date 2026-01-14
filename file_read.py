@@ -29,6 +29,11 @@ def load_from_csv(filename="data.csv"):
         print(f"Error loading data: {e}")
     
     return entries
+
+def filter_out_category(entries, category):
+    """Filters out entries amounts that match the specified category."""
+    return [entry for entry in entries if entry["Category"] == category]
+
 def save_to_csv(amount, category, description, entry_type, filename="data.csv"):
     """Saves the data to a CSV file with an auto-incrementing Label."""
     entries = load_from_csv(filename)
