@@ -14,15 +14,22 @@ def expenses(number):
         return "Warning: The entered expenses value is not valid."
 
 def calculate(income_val, expenses_val):
-    """Calculates the net balance (income - expenses) rounded to two decimals."""
+    """Calculates the net balance. Returns Invalid for bad inputs."""
     my_income = income(income_val)
     my_expenses = expenses(expenses_val)
 
-    # Check if both are floats (not warning strings) before calculating
+    #Check types FIRST (Must be floats to avoid crash)
     if isinstance(my_income, float) and isinstance(my_expenses, float):
+        
+        #Check if inputs are negative
+        if my_income < 0 or my_expenses < 0:
+            return "Invalid"
+
+        #Calculate
         amount = my_income - my_expenses
         return round(amount, 2)
     else:
+        # Returns Invalid if types were not floats
         return "Invalid"
 
 def calculate_total_recursive(entries):
