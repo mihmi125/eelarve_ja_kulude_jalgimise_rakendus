@@ -127,9 +127,6 @@ dropdown = ttk.Combobox(input_frame, textvariable=selected_option, values=option
 dropdown.grid(row=0, column=6, padx=5)
 dropdown.set("Select Category") # Sets the default text
 dropdown.bind("<<ComboboxSelected>>", show_stats)
-
-category = dropdown.get()
-
 # --- Data Table ---
 tree_frame = ttk.Frame(frame, padding=10)
 tree_frame.pack(fill="both", expand=True)
