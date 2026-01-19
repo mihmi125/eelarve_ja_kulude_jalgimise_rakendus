@@ -119,13 +119,13 @@ desc_entry = ttk.Entry(input_frame, width=20)
 desc_entry.grid(row=0, column=3, padx=5)
 
 # --- Drop Down Menu: Pre-defined categories for better data organization ---
-options = ["Toit", "Transport", "Meelelahutus", "Muu"]
+options = ["Select Category", "Toit", "Transport", "Meelelahutus", "Muu"]
 
 selected_option = StringVar()
 
 dropdown = ttk.Combobox(input_frame, textvariable=selected_option, values=options, state="readonly", width=16)
 dropdown.grid(row=0, column=6, padx=5)
-dropdown.set("Select Category") # Sets the default text
+dropdown.current(0)  # Sets the default selection to "Select Category"
 dropdown.bind("<<ComboboxSelected>>", show_stats)
 # --- Data Table ---
 tree_frame = ttk.Frame(frame, padding=10)
