@@ -2,7 +2,7 @@ from tkinter import *           # Core Tkinter library
 from tkinter import ttk         # For themed widgets with a modern look
 from tkinter import messagebox  # For displaying message boxes
 from logic import *             # Import functions from logic.py
-from file_read import *         # Import functions from file_read.py
+from file_read import load_from_csv, save_to_csv, delete_data  # Import specific functions from file_read.py
 
 # --- FUNCTION DEFINITIONS ---
 
