@@ -135,7 +135,7 @@ def calculate_total_recursive(entries):
             amount = float(amount_str)
         except (TypeError, ValueError):
             continue
-        if e.get("Type") == "income":
+        if e.get("Type", "").lower() == "income":
             total += amount
         else:
             total -= amount
