@@ -91,7 +91,7 @@ def show_stats(*args):
 # ---- MAIN GUI SETUP ----
 
 frame = Tk()
-frame.title("Eelarve ja kulude j6lgimise rakendus")
+frame.title("Eelarve ja kulude jälgimise rakendus")
 frame.geometry("900x600")                               # Sets window size
 
 # --- Input Frame: Groups input widgets together ---
