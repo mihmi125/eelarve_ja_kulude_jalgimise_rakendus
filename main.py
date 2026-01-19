@@ -105,7 +105,7 @@ txtbox1 = ttk.Entry(input_frame)
 txtbox1.grid(row=0, column=1, padx=5)
 
 # --- Radiobuttons: Toggle between Income and Expense types --- 
-type_var = StringVar(value="Income") # 1 for Income, 2 for Expense
+type_var = StringVar(value="Income")  # Default type is "Income"; can be "Income" or "Expense"
 Radiobutton(input_frame, text="Income", variable=type_var, value="Income").grid(row=0, column=4)
 Radiobutton(input_frame, text="Expense", variable=type_var, value="Expense").grid(row=0, column=5)
 
