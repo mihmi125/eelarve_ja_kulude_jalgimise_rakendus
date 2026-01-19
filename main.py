@@ -129,7 +129,6 @@ dropdown.set("Select Category") # Sets the default text
 dropdown.bind("<<ComboboxSelected>>", show_stats)
 
 category = dropdown.get()
-print(f"User selected: {category}")
 
 # --- Data Table ---
 tree_frame = ttk.Frame(frame, padding=10)
