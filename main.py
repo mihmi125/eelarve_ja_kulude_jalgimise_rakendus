@@ -38,7 +38,7 @@ def add_entry():
     entry_type = type_var.get()
 
     # -Validation check: Stop the process if the user entered non-numeric characters-
-    if entry_type == "income":
+    if entry_type == "Income":
         value = calculate(amount, 0)
     else:
         value = calculate(0, amount)
