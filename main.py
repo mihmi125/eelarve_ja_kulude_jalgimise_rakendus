@@ -3,8 +3,8 @@ from tkinter import ttk         # For themed widgets with a modern look
 from tkinter import messagebox  # For displaying message boxes
 
 # Import data access and business logic functions
-from file_read import load_from_csv, delete_data
-from logic import calculate, filter_out_category, calculate_total_recursive, append_summary_report, save_to_csv
+from file_read import load_from_csv, delete_data, filter_out_category, append_summary_report, save_to_csv
+from logic import calculate, calculate_total_recursive
 
 # --- FUNCTION DEFINITIONS ---
 
